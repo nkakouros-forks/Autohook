@@ -86,7 +86,11 @@ main() {
     for file in "${files[@]}"; do
       scriptname="$(basename "$file")"
       echo "BEGIN $scriptname"
-      eval "'$file'"
+      if [[ "${AUTOHOOK_DEBUG-}" == '' ]]; then
+        eval "\"$file\"" &>/dev/null
+      else
+        eval "\"$file\""
+      fi
       script_exit_code="$?"
       if [[ "$script_exit_code" != 0 ]]; then
         hook_exit_code="$script_exit_code"
